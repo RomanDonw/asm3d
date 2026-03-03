@@ -35,4 +35,25 @@ extern glDisable
 ; void (uint option)
 extern glCullFace
 
+; int (uint program, const char *name)
+extern glGetUniformLocation
+
+; uint (void)
+extern glCreateProgram
+
+; void (uint program)
+extern glDeleteProgram
+
+%define GL_FRAGMENT_SHADER 8B30h
+%define GL_VERTEX_SHADER 8B31h
+
+; uint (uint type)
+extern glCreateShader
+
+; void (uint shader)
+extern glDeleteShader
+
+; void (GLuint shader, int count, const char **source, const int *length)
+extern glShaderSource
+
 %endif
