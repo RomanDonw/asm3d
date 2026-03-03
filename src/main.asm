@@ -1,5 +1,6 @@
 default rel
 ;%include "enter64.inc"
+%include "fstore.inc"
 
 section .data
     windowptr dq 0
@@ -173,9 +174,10 @@ main:
     ; ============
 
     ;mov qword [tmp__f64], 0.0
-    xor rax, rax
-    mov [tmp__f64], rax
-    movsd xmm0, [tmp__f64]
+    ;xor rax, rax
+    ;mov [tmp__f64], rax
+    ;movsd xmm0, [tmp__f64]
+    xorps xmm0, xmm0
     call glfwSetTime
 
     .mainloop:
