@@ -5,7 +5,9 @@
     push rbp
     mov rbp, rsp
 
-    sub rsp, %1
+    %if %1 != 0
+        sub rsp, %1
+    %endif
 %endmacro
 
 %macro enteralign64 1
