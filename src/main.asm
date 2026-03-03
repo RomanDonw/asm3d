@@ -13,7 +13,16 @@ section .data
 
     windowtitle__string db "Assembly OpenGL demo.", 0
 
+    clrcolor_r__f32 dd 0.0
+    clrcolor_g__f32 dd 0.0
+    clrcolor_b__f32 dd 0.1
+    clrcolor_a__f32 dd 1.0
 
+    tmp__f32 dd 0.0
+    tmp__f64 dq 0.0
+
+    prev_time dq 0.0
+    FRAME_DURATION dq 0.01
 
 section .text
     global main
@@ -163,7 +172,12 @@ main:
     ; window loop
     ; ============
 
-    
+    ;mov qword [tmp__f64], 0.0
+    xor rax, rax
+    mov [tmp__f64], rax
+    movsd xmm0, [tmp__f64]
+    call glfwSetTime
+
     .mainloop:
     mov rcx, [windowptr]
     call glfwWindowShouldClose
@@ -173,16 +187,26 @@ main:
         mov rcx, [windowptr]
         mov edx, GLFW_KEY_ESCAPE
         call glfwGetKey
-
         test eax, eax
         jz .nokey_escape
             mov rcx, [windowptr]
             mov edx, 1            
             call glfwSetWindowShouldClose
         .nokey_escape:
+
+        call glfwGetTime
+        movsd xmm1, [prev_time]    ; | calc next
+        addsd xmm1, [FRAME_DURATION] ; | frame time
+        cmpsd xmm0, xmm1, 5 ; >=
+        movq rax, xmm0
+        test rax, rax
+        jz .skip_frame_update
+            ; on frame changed
         
-        mov rcx, [windowptr]
-        call glfwSwapBuffers
+            mov rcx, [windowptr]
+            call glfwSwapBuffers
+
+        .skip_frame_update:
     
     call glfwPollEvents
     jmp .mainloop

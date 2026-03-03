@@ -37,6 +37,12 @@ extern glfwPollEvents
 ; int (GLFWwindow *window, int key)
 extern glfwGetKey
 
+; double (void)
+extern glfwGetTime
+
+; void (double time)
+extern glfwSetTime
+
 %define GLFW_CONTEXT_VERSION_MAJOR 22002h
 %define GLFW_CONTEXT_VERSION_MINOR 22003h
 
