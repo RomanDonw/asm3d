@@ -1,36 +1,51 @@
 default rel
-%include "enter64.inc"
+;%include "enter64.inc"
 
 section .data
+    windowptr dq 0
 
-format_str db "%s", 12, 0
-out_str db "This program cannot be run in DOS mode.", 0
-glfwInit_ok__string db "glfwInit success.", 0
+    format_str db "%s", 12, 0
+    out_str db "This program cannot be run in DOS mode.", 0
+    glfwInit_ok__string db "glfwInit success.", 0
 
-scanf_f_str db "%c", 0
-scanf_out_char db 0
+    scanf_f_str db "%c", 0
+    scanf_out_char db 0
 
-windowtitle__string db "Assembly OpenGL demo.", 0
+    windowtitle__string db "Assembly OpenGL demo.", 0
+
+
 
 section .text
+    global main
 
-global main
+    extern scanf
+    extern printf
 
-extern scanf
-extern printf
-
-%include "glfw.inc"
-%include "glad.inc"
+    %include "glfw.inc"
+    %include "glad.inc"
 
 %define WIN_W 800
 %define WIN_H 600
 
-; Stack frame:
-;   [RBP - 8] = window struct addr (GLFWwindow *).
-;   ... - "shadow space".
-
 main:
-	enteralign64 0
+    push rbp
+    mov rbp, rsp
+
+    and rsp, ~16
+    sub rsp, 32
+	;;enteralign64 8
+    ;
+    ;push rbp
+    ;mov rbp, rsp
+    ;
+    ;sub rsp, 17
+    ;
+    ;and rsp, ~16
+    ;sub rsp, 32
+
+    ;enter64 8
+    ;and rsp, ~16
+    ;sub rsp, 32
 
 	lea rcx, [format_str]
 	lea rdx, [out_str]
@@ -104,7 +119,7 @@ main:
         mov rax, 2
         jmp .quit
     .glfwCreateWindow_ok:
-    mov [rbp - 8], rax
+    mov [windowptr], rax
 
     ; make created window as current.
 
@@ -140,12 +155,44 @@ main:
     mov r9, WIN_H
     call glViewport
 
-    lea rcx, [scanf_f_str]
-    lea rdx, [scanf_out_char]
-    call scanf
+    ;lea rcx, [scanf_f_str]
+    ;lea rdx, [scanf_out_char]
+    ;call scanf
+
+    ; ============
+    ; window loop
+    ; ============
+
+    
+    .mainloop:
+    mov rcx, [windowptr]
+    call glfwWindowShouldClose
+    test eax, eax
+    jnz .mainloop__end
+
+        mov rcx, [windowptr]
+        mov edx, GLFW_KEY_ESCAPE
+        call glfwGetKey
+
+        test eax, eax
+        jz .nokey_escape
+            mov rcx, [windowptr]
+            mov edx, 1            
+            call glfwSetWindowShouldClose
+        .nokey_escape:
+        
+        mov rcx, [windowptr]
+        call glfwSwapBuffers
+    
+    call glfwPollEvents
+    jmp .mainloop
+    .mainloop__end:
 
 	xor rax, rax
 	.quit:
 
-	leave64
+	;leave64
+    
+    mov rsp, rbp
+    pop rbp
 	ret
