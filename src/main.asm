@@ -15,7 +15,7 @@ section .data
 
     clrcolor_r__f32 dd 0.0
     clrcolor_g__f32 dd 0.0
-    clrcolor_b__f32 dd 0.1
+    clrcolor_b__f32 dd 1.0
     clrcolor_a__f32 dd 1.0
 
     tmp__f32 dd 0.0
@@ -202,6 +202,15 @@ main:
         test rax, rax
         jz .skip_frame_update
             ; on frame changed
+
+            movss xmm0, [clrcolor_r__f32]
+            movss xmm1, [clrcolor_g__f32]
+            movss xmm2, [clrcolor_b__f32]
+            movss xmm3, [clrcolor_a__f32]
+            call glClearColor
+
+            mov ecx, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT
+            call glClear
         
             mov rcx, [windowptr]
             call glfwSwapBuffers
