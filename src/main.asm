@@ -181,6 +181,9 @@ main:
     fstore32 [tmp__f32], 32.48
     fstore64 [tmp__f64], 48.64
 
+    mov ecx, GL_DEPTH_TEST
+    call glEnable
+
     xorps xmm0, xmm0
     call glfwSetTime
 
