@@ -2,7 +2,10 @@
 %define FSTORE_INC
 
 %macro fstore32 2
-    mov dword %1, %%value
+    push rax
+        mov eax, [%%value]
+        mov %1, eax
+    pop rax
 
     jmp %%skip
         %%value dd %2
@@ -10,7 +13,10 @@
 %endmacro
 
 %macro fstore64 2
-    mov qword %1, %%value
+    push rax
+        mov rax, [%%value]
+        mov %1, rax
+    pop rax
 
     jmp %%skip
         %%value dq %2

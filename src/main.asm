@@ -177,6 +177,10 @@ main:
     ;xor rax, rax
     ;mov [tmp__f64], rax
     ;movsd xmm0, [tmp__f64]
+
+    fstore32 [tmp__f32], 32.48
+    fstore64 [tmp__f64], 48.64
+
     xorps xmm0, xmm0
     call glfwSetTime
 
