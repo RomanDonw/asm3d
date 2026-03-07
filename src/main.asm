@@ -33,6 +33,7 @@ section .text
 
     %include "glfw.inc"
     %include "glad.inc"
+    %include "cstdlib.inc"
 
 %define WIN_W 800
 %define WIN_H 600

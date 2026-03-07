@@ -53,7 +53,32 @@ extern glCreateShader
 ; void (uint shader)
 extern glDeleteShader
 
-; void (GLuint shader, int count, const char **source, const int *length)
+; void (uint shader, int count, const char **source, const int *length)
 extern glShaderSource
+
+; void (uint shader)
+extern glCompileShader
+
+; void (uint program, uint shader)
+extern glAttachShader
+
+; void (uint program)
+extern glLinkProgram
+
+%define GL_COMPILE_STATUC 8B81h
+%define GL_LINK_STATUS 8B82h
+%define GL_INFO_LOG_LENGTH 8B84h
+
+; void (uint program, uint paramname, int *out_params)
+extern glGetShaderiv
+
+; void (uint program, int buffSize, int *length, char *out_infoLog)
+extern glGetShaderInfoLog
+
+; void (uint program, uint paramname, int *out_params)
+extern glGetPrograviv
+
+; void (uint program, int buffSize, int *length, char *out_infoLog)
+extern glGetProgramInfoLog
 
 %endif
